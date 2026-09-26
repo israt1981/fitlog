@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { WorkoutProvider } from "@/context/WorkoutContext";
 import { Toaster } from "react-hot-toast";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +22,17 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-[#121212] text-white min-h-screen flex flex-col`}>
         <WorkoutProvider>
-          {children}
+          {/* Navbar সবার উপরে থাকবে */}
+          <Navbar />
+          
+          {/* মূল কনটেন্ট */}
+          <main className="grow">
+            {children}
+          </main>
+          
+          {/* Footer সবার নিচে থাকবে */}
+          <Footer />
+          
           <Toaster 
             position="bottom-right" 
             toastOptions={{
