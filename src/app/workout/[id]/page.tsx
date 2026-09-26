@@ -15,12 +15,11 @@ export default function WorkoutDetails() {
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // একক ওয়ার্কআউটের ডেটা ফেচ করা
   useEffect(() => {
     if (!id) return;
     const fetchWorkoutDetail = async () => {
       try {
-        const res = await fetch(`https://api.abcz.workers.dev/api/fitlog/${id}`);
+        const res = await fetch(`https://api.api-store.workers.dev/api/fitlog/${id}`);
         const data = await res.json();
         setWorkout(data);
       } catch (error) {
@@ -62,7 +61,6 @@ export default function WorkoutDetails() {
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-10">
-      {/* Back Button */}
       <button 
         onClick={() => router.back()}
         className="flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition text-sm font-semibold cursor-pointer"
@@ -71,7 +69,6 @@ export default function WorkoutDetails() {
       </button>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-        {/* বাম সাইড: বড় ছবি */}
         <div className="relative h-96 lg:h-[550px] w-full rounded-2xl overflow-hidden bg-gray-900 border border-gray-800">
           <Image 
             src={workoutImage} 
@@ -82,7 +79,6 @@ export default function WorkoutDetails() {
           />
         </div>
 
-        {/* ডান সাইড: ডিটেইলস ও স্পেকস */}
         <div className="space-y-6">
           <div className="flex flex-wrap gap-2">
             {workoutTags.map((tag: string, index: number) => (
@@ -100,7 +96,6 @@ export default function WorkoutDetails() {
             A compound press that builds chest thickness, triceps, and pressing power from a stable bench.
           </p>
 
-          {/* Specs Table */}
           <div className="bg-[#1a1a1a] rounded-xl border border-gray-800 overflow-hidden">
             <div className="grid grid-cols-2 p-4 border-b border-gray-800 text-sm">
               <span className="text-gray-400 font-medium">Equipment</span>
@@ -130,7 +125,6 @@ export default function WorkoutDetails() {
             </div>
           </div>
 
-          {/* Instructions Section */}
           <div className="space-y-3">
             <h3 className="text-lg font-bold uppercase tracking-wider text-white">Instructions</h3>
             <ol className="list-decimal list-inside space-y-2 text-gray-400 text-sm">
@@ -141,7 +135,6 @@ export default function WorkoutDetails() {
             </ol>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">
             <button 
               onClick={() => addToPlan(workout)}
