@@ -3,18 +3,35 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Flame, Star, Trash2, Check, ArrowRight } from "lucide-react";
+import { Clock, Flame, Star, Trash2, Check, ArrowRight, ChevronDown } from "lucide-react";
 import { useWorkout, Workout } from "@/context/WorkoutContext";
 
 export default function MyPlan() {
   const { plan, saved, removeFromPlan, removeFromSaved, markAsDone } = useWorkout();
   const [activeTab, setActiveTab] = useState<"today" | "saved">("today");
+  const [sortBy, setSortBy] = useState<"duration" | "calories" | "rating">("duration");
 
   const currentList = activeTab === "today" ? plan : saved;
 
+  // সর্টিং লজিক (TypeScript error সম্পূর্ণ ফিক্সড)
+  const sortedList = [...currentList].sort((a, b) => {
+    if (sortBy === "duration") {
+      const durA = parseInt(String(a.duration || "0").replace(/\D/g, "")) || 0;
+      const durB = parseInt(String(b.duration || "0").replace(/\D/g, "")) || 0;
+      return durA - durB;
+    } else if (sortBy === "calories") {
+      const calA = parseInt(String(a.calories || "0").replace(/\D/g, "")) || 0;
+      const calB = parseInt(String(b.calories || "0").replace(/\D/g, "")) || 0;
+      return calA - calB;
+    } else if (sortBy === "rating") {
+      return (Number(b.rating) || 0) - (Number(a.rating) || 0);
+    }
+    return 0;
+  });
+
   const totalExercises = plan.length;
-  const totalMinutes = plan.reduce((acc, curr) => acc + parseInt(String(curr.duration)) || 0, 0);
-  const totalCalories = plan.reduce((acc, curr) => acc + parseInt(String(curr.calories)) || 0, 0);
+  const totalMinutes = plan.reduce((acc, curr) => acc + (parseInt(String(curr.duration || "0").replace(/\D/g, "")) || 0), 0);
+  const totalCalories = plan.reduce((acc, curr) => acc + (parseInt(String(curr.calories || "0").replace(/\D/g, "")) || 0), 0);
 
   return (
     <div className="max-w-7xl mx-auto px-6 md:px-12 py-12">
@@ -38,30 +55,46 @@ export default function MyPlan() {
         </div>
       </div>
 
-      <div className="flex items-center gap-4 border-b border-gray-800 pb-4 mb-8">
-        <button
-          onClick={() => setActiveTab("today")}
-          className={`px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer ${
-            activeTab === "today"
-              ? "bg-[#ccff00] text-black"
-              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-          }`}
-        >
-          Today&apos;s Plan ({plan.length})
-        </button>
-        <button
-          onClick={() => setActiveTab("saved")}
-          className={`px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer ${
-            activeTab === "saved"
-              ? "bg-[#ccff00] text-black"
-              : "bg-gray-800 text-gray-300 hover:bg-gray-700"
-          }`}
-        >
-          Saved ({saved.length})
-        </button>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-gray-800 pb-4 mb-8">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={() => setActiveTab("today")}
+            className={`px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer ${
+              activeTab === "today"
+                ? "bg-[#ccff00] text-black"
+                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+            }`}
+          >
+            Today&apos;s Plan ({plan.length})
+          </button>
+          <button
+            onClick={() => setActiveTab("saved")}
+            className={`px-5 py-2 rounded-lg font-bold text-sm transition cursor-pointer ${
+              activeTab === "saved"
+                ? "bg-[#ccff00] text-black"
+                : "bg-gray-800 text-gray-300 hover:bg-gray-700"
+            }`}
+          >
+            Saved ({saved.length})
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 bg-[#1a1a1a] border border-gray-800 px-4 py-2 rounded-xl">
+          <span className="text-xs font-bold text-gray-400 uppercase tracking-wider">Sort By:</span>
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as "duration" | "calories" | "rating")}
+            className="bg-transparent text-white text-sm font-semibold focus:outline-none cursor-pointer"
+          >
+            <option value="duration" className="bg-[#1a1a1a] text-white">Duration</option>
+            <option value="calories" className="bg-[#1a1a1a] text-white">Calories</option>
+            <option value="rating" className="bg-[#1a1a1a] text-white">Rating</option>
+          </select>
+          <ChevronDown size={16} className="text-gray-400 pointer-events-none" />
+        </div>
       </div>
 
-      {currentList.length === 0 ? (
+      {sortedList.length === 0 ? (
         <div className="bg-[#1a1a1a] border border-gray-800 rounded-2xl p-16 text-center flex flex-col items-center justify-center space-y-4">
           <h3 className="text-2xl font-black uppercase text-white tracking-wide">Nothing Here Yet</h3>
           <p className="text-gray-400 text-sm max-w-sm">
@@ -76,7 +109,7 @@ export default function MyPlan() {
         </div>
       ) : (
         <div className="space-y-4">
-          {currentList.map((item: Workout) => {
+          {sortedList.map((item: Workout) => {
             const itemName = item.name || item.title;
             const itemImage = item.image || item.imageUrl || "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80";
 
