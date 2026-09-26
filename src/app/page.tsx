@@ -10,11 +10,10 @@ export default function Home() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // API theke data fetch kora
   useEffect(() => {
     const fetchWorkouts = async () => {
       try {
-        const res = await fetch("https://api.abcz.workers.dev/api/fitlog");
+        const res = await fetch("https://api.api-store.workers.dev/api/fitlog");
         const data = await res.json();
         setWorkouts(data);
       } catch (error) {
@@ -41,7 +40,7 @@ export default function Home() {
           </p>
           <button 
             onClick={() => document.getElementById('library')?.scrollIntoView({ behavior: 'smooth' })}
-            className="bg-[#ccff00] text-black px-8 py-4 rounded-lg font-bold flex items-center gap-2 hover:bg-[#b3e600] transition"
+            className="bg-[#ccff00] text-black px-8 py-4 rounded-lg font-bold flex items-center gap-2 hover:bg-[#b3e600] transition cursor-pointer"
           >
             BROWSE WORKOUTS <ArrowRight size={20} />
           </button>
@@ -64,7 +63,6 @@ export default function Home() {
           <p className="text-gray-400">Twelve lifts covering every major muscle group.</p>
         </div>
 
-        {/* Loading State & Grid */}
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 text-[#ccff00]">
             <Loader2 size={48} className="animate-spin mb-4" />
