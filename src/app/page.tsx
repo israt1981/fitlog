@@ -30,12 +30,12 @@ export default function Home() {
     <div className="pb-20">
       {/* Hero Section */}
       <section className="px-6 md:px-12 py-12 md:py-20 max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
-        <div className="flex-1 space-y-6">
+        <div className="flex-1 space-y-6 w-full">
           <p className="text-[#ccff00] font-bold tracking-[0.2em] text-sm uppercase">Workout Library</p>
-          <h1 className="text-5xl md:text-7xl font-black uppercase leading-[1.1] tracking-tight text-white">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black uppercase leading-[1.1] tracking-tight text-white">
             Train with intent.<br />Log every set.
           </h1>
-          <p className="text-gray-400 text-lg md:text-xl max-w-lg leading-relaxed">
+          <p className="text-gray-400 text-base md:text-xl max-w-lg leading-relaxed">
             FitLog is a dark, no-nonsense gym companion: pick a lift, lock it into today&apos;s plan, and watch the week&apos;s work add up.
           </p>
           <button 
@@ -45,11 +45,14 @@ export default function Home() {
             BROWSE WORKOUTS <ArrowRight size={20} />
           </button>
         </div>
-        <div className="flex-1 relative w-full h-72 md:h-[500px]">
+
+        {/* Banner Image Container optimized for mobile */}
+        <div className="w-full md:flex-1 relative h-80 sm:h-96 md:h-[500px]">
           <Image 
             src="/banner.png" 
             alt="Gym workout banner" 
             fill 
+            priority
             sizes="(max-width: 768px) 100vw, 50vw"
             className="object-contain" 
           />
