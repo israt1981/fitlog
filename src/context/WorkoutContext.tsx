@@ -40,9 +40,12 @@ export const WorkoutProvider = ({ children }: { children: React.ReactNode }) => 
   useEffect(() => {
     const storedPlan = localStorage.getItem("fitlog_plan");
     const storedSaved = localStorage.getItem("fitlog_saved");
-    if (storedPlan) setPlan(JSON.parse(storedPlan));
-    if (storedSaved) setSaved(JSON.parse(storedSaved));
-    setIsLoaded(true);
+    
+    setTimeout(() => {
+      if (storedPlan) setPlan(JSON.parse(storedPlan));
+      if (storedSaved) setSaved(JSON.parse(storedSaved));
+      setIsLoaded(true);
+    }, 0);
   }, []);
 
   // ডেটা চেঞ্জ হলে LocalStorage আপডেট করা
