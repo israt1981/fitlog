@@ -1,28 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Flame, Star, Trash2, Check, ArrowRight, Loader2 } from "lucide-react";
+import { Clock, Flame, Star, Trash2, Check, ArrowRight } from "lucide-react";
 import { useWorkout, Workout } from "@/context/WorkoutContext";
 
 export default function MyPlan() {
   const { plan, saved, removeFromPlan, removeFromSaved, markAsDone } = useWorkout();
   const [activeTab, setActiveTab] = useState<"today" | "saved">("today");
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] text-[#ccff00]">
-        <Loader2 size={48} className="animate-spin mb-4" />
-        <p className="font-bold tracking-widest uppercase">Loading workouts...</p>
-      </div>
-    );
-  }
 
   const currentList = activeTab === "today" ? plan : saved;
 
