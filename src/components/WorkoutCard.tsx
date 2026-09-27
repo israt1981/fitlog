@@ -1,60 +1,63 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, Flame, Star } from "lucide-react";
+import { Clock, Flame, Star, ChevronRight } from "lucide-react";
 import { Workout } from "@/context/WorkoutContext";
 
-export default function WorkoutCard({ workout }: { workout: Workout }) {
-  // API থেকে আসা ডেটার key গুলো ঠিকমতো ম্যাপ করা হচ্ছে
-  const workoutName = workout.name || workout.title;
+interface WorkoutCardProps {
+  workout: Workout;
+}
+
+export default function WorkoutCard({ workout }: WorkoutCardProps) {
+  const workoutName = workout.name || workout.title || "Workout";
   const workoutImage = workout.image || workout.imageUrl || "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?w=800&q=80";
-  const workoutTags = workout.tags || workout.category || [];
 
   return (
-    <Link href={`/workout/${workout.id}`}>
-      <div className="bg-[#1a1a1a] rounded-xl overflow-hidden hover:scale-[1.02] transition duration-300 border border-gray-800 hover:border-gray-600 cursor-pointer h-full flex flex-col">
-        {/* ছবি */}
-        <div className="relative h-48 w-full bg-gray-800">
-          <Image
-            src={workoutImage}
-            alt={workoutName || "Workout image"}
-            fill
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover"
-          />
-        </div>
-
-        {/* কনটেন্ট */}
-        <div className="p-5 flex flex-col grow">
-          {/* ক্যাটাগরি ট্যাগস */}
-          <div className="flex flex-wrap gap-2 mb-3">
-            {workoutTags.map((tag, index) => (
-              <span key={index} className="bg-[#ccff00] text-black text-[10px] font-bold px-2 py-1 rounded-full uppercase">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {/* টাইটেল এবং ইকুইপমেন্ট */}
-          <h3 className="text-xl font-bold text-white uppercase tracking-wide mb-1">{workoutName}</h3>
-          <p className="text-gray-400 text-sm mb-4">{workout.equipment}</p>
-
-          {/* স্ট্যাটস */}
-          <div className="mt-auto flex items-center gap-4 text-xs font-semibold text-[#ccff00]">
-            <div className="flex items-center gap-1">
-              <Clock size={14} />
-              <span>{workout.duration}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Flame size={14} />
-              <span>{workout.calories}</span>
-            </div>
-            <div className="flex items-center gap-1 text-gray-300">
-              <Star size={14} className="text-[#ccff00]" />
-              <span>{workout.rating}</span>
-            </div>
-          </div>
-        </div>
+    <div className="bg-[#1a1a1a] border border-gray-800 rounded-3xl overflow-hidden flex flex-col justify-between hover:border-gray-700 transition group">
+      <div className="relative h-56 w-full bg-gray-900 overflow-hidden">
+        <Image
+          src={workoutImage}
+          alt={workoutName}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="object-cover group-hover:scale-105 transition duration-500"
+        />
+        <span className="absolute top-4 left-4 bg-black/70 backdrop-blur-md text-[#ccff00] text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full border border-gray-800">
+          {workout.equipment || "Bodyweight"}
+        </span>
       </div>
-    </Link>
+
+      <div className="p-6 flex flex-col grow justify-between space-y-4">
+        <div>
+          <h3 className="text-xl font-black uppercase text-white tracking-wide mb-2">
+            {workoutName}
+          </h3>
+          <p className="text-gray-400 text-xs line-clamp-2">
+            {workout.description || "Execute with proper form, keep your core braced, and push through each repetition with intention."}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between pt-4 border-t border-gray-800/80 text-xs font-bold text-gray-300">
+          <div className="flex items-center gap-1.5">
+            <Clock size={15} className="text-[#ccff00]" />
+            <span>{workout.duration}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Flame size={15} className="text-[#ccff00]" />
+            <span>{workout.calories}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Star size={15} className="text-[#ccff00] fill-current" />
+            <span>{workout.rating}</span>
+          </div>
+        </div>
+
+        <Link
+          href={`/workout/${workout.id}`}
+          className="w-full bg-gray-900 hover:bg-[#ccff00] hover:text-black text-white font-bold py-3 rounded-xl flex items-center justify-center gap-2 transition text-sm cursor-pointer"
+        >
+          View Details <ChevronRight size={16} />
+        </Link>
+      </div>
+    </div>
   );
 }

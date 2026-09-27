@@ -22,15 +22,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.className} bg-[#121212] text-white min-h-screen flex flex-col`}>
         <WorkoutProvider>
-          {/* Navbar সবার উপরে থাকবে */}
+          {/* Navbar */}
           <Navbar />
           
-          {/* মূল কনটেন্ট */}
+          {/* main content  */}
           <main className="grow">
             {children}
           </main>
           
-          {/* Footer সবার নিচে থাকবে */}
+          {/* Footer  */}
           <Footer />
           
           <Toaster 
